@@ -5,7 +5,7 @@ import (
 	"github.com/timmbarton/layout/components/httpserver"
 	"github.com/timmbarton/layout/components/postgresconn"
 	"github.com/timmbarton/layout/components/redisconn"
-	"github.com/timmbarton/layout/components/tracingconn"
+	"github.com/timmbarton/layout/components/signoz"
 
 	"github.com/timmbarton/example/internal/usecase"
 )
@@ -15,6 +15,6 @@ type Config struct {
 	GRPC     grpcserver.DefaultServerConfig
 	Postgres postgresconn.Config
 	Redis    redisconn.Config
-	Tracing  tracingconn.Config
+	SigNoz   signoz.Config
 	UseCase  usecase.Config
 }

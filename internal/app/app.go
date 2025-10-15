@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/timmbarton/layout/components/postgresconn"
 	"github.com/timmbarton/layout/components/redisconn"
-	"github.com/timmbarton/layout/components/tracingconn"
+	"github.com/timmbarton/layout/components/signoz"
 	"github.com/timmbarton/layout/executor"
 	"github.com/timmbarton/layout/template"
 
@@ -17,6 +17,8 @@ import (
 
 func New(cfg config.Config) (executor.App, error) {
 	a := &template.App{}
+
+	sn, err := signoz.New(cfg.SigNoz)
 
 	pg, err := postgresconn.New(cfg.Postgres)
 	if err != nil {
@@ -39,7 +41,7 @@ func New(cfg config.Config) (executor.App, error) {
 	}
 
 	a.AddComponents(
-		tracingconn.New(cfg.Tracing),
+		sn,
 		pg,
 		rd,
 		httpServer,
