@@ -1,3 +1,8 @@
 package repository
 
-const ()
+const (
+	queryGetFooBar = `
+		SELECT *
+		FROM foobar
+	`
+)

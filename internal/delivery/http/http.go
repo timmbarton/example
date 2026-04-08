@@ -4,11 +4,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/timmbarton/layout/components/httpserver"
 	"github.com/timmbarton/layout/lifecycle"
-
-	"github.com/timmbarton/example/internal/usecase"
 )
 
-func New(cfg httpserver.Config, uc *usecase.UseCases) lifecycle.Lifecycle {
+func New(cfg httpserver.Config, uc UseCase) lifecycle.Lifecycle {
 	s := &httpserver.DefaultServer{}
 
 	h := &handler{

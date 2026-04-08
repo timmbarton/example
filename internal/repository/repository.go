@@ -1,20 +1,30 @@
 package repository
 
 import (
-	"github.com/timmbarton/layout/components/postgresconn"
+	"context"
+
+	"github.com/jmoiron/sqlx"
+	"github.com/timmbarton/utils/tracing"
 )
 
-type Repositories struct {
-	Example ExampleRepository
-}
-
-func New(pg *postgresconn.Conn) *Repositories {
-	return &Repositories{
-		Example: &exampleRepository{
-			pg: pg,
-		},
+func New(pg *sqlx.DB) *Repository {
+	return &Repository{
+		pg: pg,
 	}
 }
 
-type ExampleRepository interface {
+type Repository struct {
+	pg *sqlx.DB
+}
+
+func (r *Repository) GetFooBar(ctx context.Context) (res []int64, err error) {
+	ctx, span := tracing.NewSpan(ctx)
+	defer span.End()
+
+	err = r.pg.SelectContext(ctx, &res, queryGetFooBar)
+	if err != nil {
+		return res, err
+	}
+
+	return
 }

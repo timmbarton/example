@@ -30,7 +30,7 @@ func New(cfg config.Config) (executor.App, error) {
 		return nil, err
 	}
 
-	r := repository.New(pg)
+	r := repository.New(pg.DB())
 	c := cache.NewCache(rd)
 	uc := usecase.New(cfg.UseCase, r, c)
 	httpServer := http.New(cfg.HTTP, uc)

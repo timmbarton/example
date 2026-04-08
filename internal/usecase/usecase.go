@@ -1,31 +1,45 @@
 package usecase
 
 import (
-	"github.com/timmbarton/example/internal/cache"
-	"github.com/timmbarton/example/internal/repository"
+	"context"
+
+	"github.com/timmbarton/utils/tracing"
 )
 
-type UseCases struct {
-	Webmaster WebmasterUseCase
-	Admin     AdminUseCase
-}
-
-type Config struct {
-	Webmaster WebmasterConfig
-}
-
-func New(cfg Config, r *repository.Repositories, c cache.Cache) *UseCases {
-	return &UseCases{
-		Webmaster: &webmasterUseCase{
-			cfg: cfg.Webmaster,
-			r:   r,
-			c:   c,
-		},
+func New(cfg Config, r Repository, c Cache) *UseCase {
+	return &UseCase{
+		cfg: cfg,
+		r:   r,
+		c:   c,
 	}
 }
 
-type WebmasterUseCase interface {
+type Config struct {
 }
 
-type AdminUseCase interface {
+type UseCase struct {
+	cfg Config
+	r   Repository
+	c   Cache
+}
+
+type FooBarRequest struct {
+	Data string `json:"data" validate:"required,max=100"`
+}
+
+func (uc *UseCase) FooBar(ctx context.Context, req FooBarRequest) (res []int64, err error) {
+	ctx, span := tracing.NewSpan(ctx)
+	defer span.End()
+
+	// some work
+	if req.Data == "empty" {
+		return res, err
+	}
+
+	res, err = uc.r.GetFooBar(ctx)
+	if err != nil {
+		return res, err
+	}
+
+	return nil, nil
 }

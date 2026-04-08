@@ -1,0 +1,19 @@
+// protoc --go_out=./pkg --go_opt=paths=source_relative --go-grpc_out=./pkg --go-grpc_opt=paths=source_relative ./api/grpc/*.proto
+syntax = "proto3";
+package Example;
+
+option go_package = "example/example";
+
+import "google/protobuf/empty.proto";
+
+service ExampleService {
+  rpc FooBar(FooBarRequest) returns (FooBarResponse) {}
+}
+
+message FooBarRequest {
+  string Data = 1;
+}
+
+message FooBarResponse {
+  repeated int64 Data = 1;
+}
